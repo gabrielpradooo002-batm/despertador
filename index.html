@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meu Despertador IA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+    main {
+      max-width: 400px;
+      margin: auto;
+      background: #1e293b;
+      padding: 24px;
+      border-radius: 20px;
+    }
+    h1 { color: #7dd3fc; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border: 0;
+      border-radius: 10px;
+      font-size: 17px;
+    }
+    button {
+      background: #38bdf8;
+      color: #082f49;
+      font-weight: bold;
+    }
+    #status { color: #a7f3d0; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🤖 Despertador IA</h1>
+    <h2 id="relogio">07:00</h2>
+    <p>Vamos começar o dia com energia!</p>
+
+    <label for="hora">Horário do alarme</label>
+    <input id="hora" type="time" value="07:00">
+
+    <button onclick="ativar()">Ativar alarme</button>
+    <button onclick="testar()">Testar voz</button>
+
+    <p id="status">Alarme desligado.</p>
+  </main>
+
+  <script>
+    let temporizador;
+    let ultimoToque = "";
+
+    function falar(mensagem) {
+      if (!("speechSynthesis" in window)) {
+        alert(mensagem);
+        return;
+      }
+      speechSynthesis.cancel();
+      const voz = new SpeechSynthesisUtterance(mensagem);
+      voz.lang = "pt-BR";
+      voz.rate = 0.9;
+      speechSynthesis.speak(voz);
+    }
+
+    function testar() {
+      falar("Bom dia! Você é capaz de aprender coisas novas.
+      Levante e faça deste dia uma oportunidade para crescer!");
+    }
+
+    function ativar() {
+      clearInterval(temporizador);
+      const hora = document.getElementById("hora").value;
+      if (!hora) return;
+
+      document.getElementById("status").textContent =
+        "Alarme programado para " + hora;
+
+      temporizador = setInterval(() => {
+        const agora = new Date();
+        const atual = String(agora.getHours()).padStart(2, "0")
+          + ":" + String(agora.getMinutes()).padStart(2, "0");
+        document.getElementById("relogio").textContent = atual;
+
+        if (atual === hora && ultimoToque !== atual +
+            agora.toDateString()) {
+          ultimoToque = atual + agora.toDateString();
+          document.getElementById("status").textContent =
+            "Bom dia Gabriel Prado! Hora de acordar!";
+          falar("Bom dia Gabriel Prado! São sete horas. Levante e comece
+          seu dia com energia!");
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
