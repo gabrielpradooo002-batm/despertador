@@ -1,1 +1,0 @@
-falar("Bom dia Gabriel Prado! São sete horas. Levante e comece seu dia com energia!");
